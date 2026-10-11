@@ -1,0 +1,65 @@
+import { CompanyProfile, ServiceItem } from '../types';
+
+export const INITIAL_COMPANY_PROFILE: CompanyProfile = {
+  companyNameTh: 'บริษัท 3ต อินเตอร์คูล แอนด์ เซอร์วิส จำกัด',
+  companyNameEn: '3T INTERCOOL & SERVICE CO.,LTD.',
+  managingDirectorTh: 'นาย ธวัชชัย บาระพรม',
+  managingDirectorEn: 'MR. TAWATCHAI BARAPHOM',
+  phone: '081-5163898',
+  lineId: 'chelsea898',
+  managerTh: 'นาย ศักดิ์ดา นามวิชัย',
+  managerEn: 'MR. SUKDA NAMWICHAI',
+  managerPhone: '098-9128541',
+  managerLineId: '0989128541',
+  email: '3t.intercool@gmail.com',
+  address: 'เลขที่ 109/94 หมู่บ้านพฤกษา51 ซอย ฉลองกรุง53 แขวงลำปลาทิว เขตลาดกระบัง จังหวัดกรุงเทพมหานคร 10520',
+  announcement: 'ยินดีให้บริการงานระบบปรับอากาศและทำความเย็นครบวงจร พร้อมทีมงานวิศวกรผู้เชี่ยวชาญ บริการทั่วกรุงเทพฯ และปริมณฑล',
+};
+
+export const INITIAL_SERVICES: ServiceItem[] = [
+  {
+    id: 'srv-1',
+    title: 'งานระบบ AIR CONDITIONING (เครื่องปรับอากาศ)',
+    category: 'AIR_CONDITIONING',
+    summary: 'รับออกแบบ เขียนแบบ ติดตั้ง ซ่อมบำรุง และล้างระบบเครื่องปรับอากาศทุกประเภท ตั้งแต่บ้านพัก อาคารสำนักงาน ไปจนถึงโรงงานอุตสาหกรรม (VRV, VRF, Chilled Water, Split Type)',
+    features: 'ระบบ VRV/VRF ประหยัดพลังงานสูง, งานติดตั้งท่อน้ำยาและสายไฟตามมาตรฐานความปลอดภัย, ตรวจเช็คค่าแรงดันน้ำยาและประสิทธิภาพลมเย็น, สัญญาบริการบำรุงรักษาเชิงป้องกัน (PM)',
+    isActive: true,
+    order: 1,
+  },
+  {
+    id: 'srv-2',
+    title: 'งานระบบ COLD ROOM (ห้องเย็น)',
+    category: 'COLD_ROOM',
+    summary: 'ออกแบบและติดตั้งห้องเย็นควบคุมอุณหภูมิสำหรับเก็บรักษาอาหาร วัตถุดิบ ผักผลไม้ ยา และสินค้าควบคุมอุณหภูมิพิเศษ ทั้งอุณหภูมิแช่เย็น (Chiller Room) และแช่เยือกแข็ง (Freezer Room)',
+    features: 'แผ่นฉนวน Sandwich Panel คุณภาพสูงกันความร้อน 100%, ชุด Condensing Unit & Evaporator ควบคุมอุณหภูมิตั้งแต่ +15°C ถึง -40°C, ระบบละลายน้ำแข็งอัตโนมัติ (Defrost System), ประตูห้องเย็นและม่านริ้วกันสูญเสียความเย็น',
+    isActive: true,
+    order: 2,
+  },
+  {
+    id: 'srv-3',
+    title: 'งานระบบ DUCT PIPE (ท่อลม)',
+    category: 'DUCT_PIPE',
+    summary: 'งานติดตั้งท่อส่งลมปรับอากาศ ท่อลมเย็น ท่อดูดอากาศเสีย (Exhaust Air) ท่อเติมอากาศบริสุทธิ์ (Fresh Air) และระบบดูดควันห้องครัว/โรงงาน พร้อมฉนวนกันความร้อน',
+    features: 'ท่อสังกะสี Galvanized และ Stainless ตามมาตรฐาน SMACNA, หุ้มฉนวนใยแก้วหรือฉนวนยางสังเคราะห์ป้องกันการเกิดหยดน้ำ (Condensation), หัวจ่ายลม Grill & Diffuser กระจายลมเย็นสม่ำเสมอ, พัดลมระบายอากาศอุตสาหกรรม',
+    isActive: true,
+    order: 3,
+  },
+  {
+    id: 'srv-4',
+    title: 'งานระบบ CHILLER (เครื่องทำความเย็น)',
+    category: 'CHILLER',
+    summary: 'งานระบบชิลเลอร์ขนาดใหญ่สำหรับอาคารสูง โรงพยาบาล และระบบหล่อเย็นในกระบวนการผลิตทางอุตสาหกรรม (Air-Cooled & Water-Cooled Chiller)',
+    features: 'ติดตั้งท่อน้ำเย็น Chilled Water Pipe พร้อมวาล์วควบคุมและฉนวนกันความร้อน, งาน Cooling Tower และปั๊มน้ำหมุนเวียน, ตรวจเช็ค Overhaul และวิเคราะห์สมรรถนะระบบ, ระบบควบคุมอัตโนมัติ PLC และเซ็นเซอร์อุณหภูมิแม่นยำ',
+    isActive: true,
+    order: 4,
+  },
+  {
+    id: 'srv-5',
+    title: 'งานระบบของตู้แช่ทุกประเภท',
+    category: 'FREEZER_SHOWCASE',
+    summary: 'รับตรวจเช็ค ซ่อมแซม ติดตั้ง และดัดแปลงตู้แช่เชิงพาณิชย์ทุกประเภท สำหรับซูเปอร์มาร์เก็ต มินิมาร์ท ร้านสะดวกซื้อ ร้านเบเกอรี่ และภัตตาคาร',
+    features: 'ตู้แช่เครื่องดื่มประตูกระจก (Upright Glass Door Chillers), ตู้แช่แข็งอาหารสด (Deep Freezers & Island Freezers), ตู้แช่สแตนเลสสำหรับครัวโรงแรมและร้านอาหาร, ตู้แช่เปิดหน้าร้าน Open Showcase ควบคุมอุณหภูมิแม่นยำ',
+    isActive: true,
+    order: 5,
+  },
+];

@@ -1,0 +1,210 @@
+{
+  "entities": {
+    "QuotationRequest": {
+      "title": "QuotationRequest",
+      "description": "Customer inquiry and quotation request for HVAC & refrigeration services",
+      "type": "object",
+      "properties": {
+        "customerName": {
+          "type": "string",
+          "description": "Full name of the customer or company representative",
+          "minLength": 2,
+          "maxLength": 100
+        },
+        "phone": {
+          "type": "string",
+          "description": "Contact telephone number",
+          "minLength": 9,
+          "maxLength": 20
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of customer",
+          "maxLength": 120
+        },
+        "lineId": {
+          "type": "string",
+          "description": "Line ID of customer for quick messaging",
+          "maxLength": 50
+        },
+        "serviceType": {
+          "type": "string",
+          "description": "Category of HVAC or refrigeration service requested",
+          "enum": [
+            "AIR_CONDITIONING",
+            "COLD_ROOM",
+            "DUCT_PIPE",
+            "CHILLER",
+            "FREEZER_SHOWCASE",
+            "OTHER"
+          ]
+        },
+        "location": {
+          "type": "string",
+          "description": "Project installation or service location",
+          "maxLength": 250
+        },
+        "details": {
+          "type": "string",
+          "description": "Scope of work or issue description",
+          "maxLength": 1000
+        },
+        "urgent": {
+          "type": "boolean",
+          "description": "Whether service is required urgently"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of the quotation request",
+          "enum": ["pending", "contacted", "quoted", "scheduled", "completed", "cancelled"]
+        },
+        "adminNotes": {
+          "type": "string",
+          "description": "Internal notes from 3T Intercool team",
+          "maxLength": 500
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Server timestamp of creation",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Server timestamp of last update",
+          "format": "date-time"
+        }
+      },
+      "required": ["customerName", "phone", "serviceType", "status"]
+    },
+    "ServiceItem": {
+      "title": "ServiceItem",
+      "description": "HVAC & Refrigeration service offering catalog item",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Name of service",
+          "minLength": 2,
+          "maxLength": 120
+        },
+        "category": {
+          "type": "string",
+          "description": "System category",
+          "enum": [
+            "AIR_CONDITIONING",
+            "COLD_ROOM",
+            "DUCT_PIPE",
+            "CHILLER",
+            "FREEZER_SHOWCASE"
+          ]
+        },
+        "summary": {
+          "type": "string",
+          "description": "Brief description of the service scope",
+          "maxLength": 300
+        },
+        "features": {
+          "type": "string",
+          "description": "Key capabilities or specifications comma-delimited",
+          "maxLength": 500
+        },
+        "isActive": {
+          "type": "boolean",
+          "description": "Whether the service is publicly displayed"
+        },
+        "order": {
+          "type": "number",
+          "description": "Display order index"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Last update timestamp"
+        }
+      },
+      "required": ["title", "category", "summary", "isActive"]
+    },
+    "CompanyProfile": {
+      "title": "CompanyProfile",
+      "description": "Company contact info and announcement",
+      "type": "object",
+      "properties": {
+        "companyNameTh": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "companyNameEn": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "managingDirectorTh": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "managingDirectorEn": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "managerTh": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "managerEn": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "managerPhone": {
+          "type": "string",
+          "maxLength": 30
+        },
+        "managerLineId": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 30
+        },
+        "lineId": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "address": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "announcement": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      },
+      "required": ["companyNameTh", "companyNameEn", "phone", "email"]
+    }
+  },
+  "firestore": {
+    "/quotations/{quotationId}": {
+      "schema": {
+        "$ref": "QuotationRequest"
+      },
+      "description": "Customer service inquiries and quotation requests"
+    },
+    "/services/{serviceId}": {
+      "schema": {
+        "$ref": "ServiceItem"
+      },
+      "description": "Company catalog of HVAC and refrigeration services"
+    },
+    "/company_info/{infoId}": {
+      "schema": {
+        "$ref": "CompanyProfile"
+      },
+      "description": "Company profile and contact parameters"
+    }
+  }
+}

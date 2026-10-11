@@ -1,0 +1,116 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default-deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Security Helper Functions
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn();
+    }
+
+    function isValidQuotation(data) {
+      return data.keys().hasAll(['customerName', 'phone', 'serviceType', 'status']) &&
+        data.keys().hasOnly(['customerName', 'phone', 'email', 'lineId', 'serviceType', 'location', 'details', 'urgent', 'status', 'adminNotes', 'createdAt', 'updatedAt']) &&
+        data.customerName is string && data.customerName.size() >= 2 && data.customerName.size() <= 100 &&
+        data.phone is string && data.phone.size() >= 8 && data.phone.size() <= 20 &&
+        (!('email' in data) || (data.email is string && data.email.size() <= 120)) &&
+        (!('lineId' in data) || (data.lineId is string && data.lineId.size() <= 50)) &&
+        data.serviceType in ['AIR_CONDITIONING', 'COLD_ROOM', 'DUCT_PIPE', 'CHILLER', 'FREEZER_SHOWCASE', 'OTHER'] &&
+        (!('location' in data) || (data.location is string && data.location.size() <= 250)) &&
+        (!('details' in data) || (data.details is string && data.details.size() <= 1000)) &&
+        (!('urgent' in data) || data.urgent is bool) &&
+        data.status in ['pending', 'contacted', 'quoted', 'scheduled', 'completed', 'cancelled'] &&
+        (!('adminNotes' in data) || (data.adminNotes is string && data.adminNotes.size() <= 500)) &&
+        (!('createdAt' in data) || data.createdAt is string) &&
+        (!('updatedAt' in data) || data.updatedAt is string);
+    }
+
+    function isValidService(data) {
+      return data.keys().hasAll(['title', 'category', 'summary', 'isActive']) &&
+        data.keys().hasOnly(['title', 'category', 'summary', 'features', 'isActive', 'order', 'updatedAt']) &&
+        data.title is string && data.title.size() >= 2 && data.title.size() <= 120 &&
+        data.category in ['AIR_CONDITIONING', 'COLD_ROOM', 'DUCT_PIPE', 'CHILLER', 'FREEZER_SHOWCASE'] &&
+        data.summary is string && data.summary.size() <= 300 &&
+        (!('features' in data) || (data.features is string && data.features.size() <= 500)) &&
+        data.isActive is bool &&
+        (!('order' in data) || (data.order is number)) &&
+        (!('updatedAt' in data) || data.updatedAt is string);
+    }
+
+    function isValidCompanyInfo(data) {
+      return data.keys().hasAll(['companyNameTh', 'companyNameEn', 'phone', 'email']) &&
+        data.keys().hasOnly(['companyNameTh', 'companyNameEn', 'managingDirectorTh', 'managingDirectorEn', 'managerTh', 'managerEn', 'managerPhone', 'managerLineId', 'phone', 'lineId', 'email', 'address', 'announcement', 'updatedAt']) &&
+        data.companyNameTh is string && data.companyNameTh.size() <= 150 &&
+        data.companyNameEn is string && data.companyNameEn.size() <= 150 &&
+        (!('managingDirectorTh' in data) || (data.managingDirectorTh is string && data.managingDirectorTh.size() <= 100)) &&
+        (!('managingDirectorEn' in data) || (data.managingDirectorEn is string && data.managingDirectorEn.size() <= 100)) &&
+        (!('managerTh' in data) || (data.managerTh is string && data.managerTh.size() <= 100)) &&
+        (!('managerEn' in data) || (data.managerEn is string && data.managerEn.size() <= 100)) &&
+        (!('managerPhone' in data) || (data.managerPhone is string && data.managerPhone.size() <= 30)) &&
+        (!('managerLineId' in data) || (data.managerLineId is string && data.managerLineId.size() <= 50)) &&
+        data.phone is string && data.phone.size() <= 30 &&
+        (!('lineId' in data) || (data.lineId is string && data.lineId.size() <= 50)) &&
+        data.email is string && data.email.size() <= 100 &&
+        (!('address' in data) || (data.address is string && data.address.size() <= 300)) &&
+        (!('announcement' in data) || (data.announcement is string && data.announcement.size() <= 500)) &&
+        (!('updatedAt' in data) || data.updatedAt is string);
+    }
+
+    // Quotations / Inquiries
+    match /quotations/{quotationId} {
+      allow get: if isValidId(quotationId) && isAdmin();
+      allow list: if isAdmin();
+      allow create: if isValidId(quotationId) &&
+        isValidQuotation(incoming()) &&
+        incoming().status == 'pending';
+      allow update: if isValidId(quotationId) &&
+        isAdmin() &&
+        isValidQuotation(incoming());
+      allow delete: if isValidId(quotationId) && isAdmin();
+    }
+
+    // Services Catalog
+    match /services/{serviceId} {
+      allow get: if isValidId(serviceId);
+      allow list: if true;
+      allow create: if isValidId(serviceId) && isAdmin() && isValidService(incoming());
+      allow update: if isValidId(serviceId) && isAdmin() && isValidService(incoming());
+      allow delete: if isValidId(serviceId) && isAdmin();
+    }
+
+    // Company Info
+    match /company_info/{infoId} {
+      allow get: if isValidId(infoId);
+      allow list: if true;
+      allow create: if isValidId(infoId) && isAdmin() && isValidCompanyInfo(incoming());
+      allow update: if isValidId(infoId) && isAdmin() && isValidCompanyInfo(incoming());
+      allow delete: if isValidId(infoId) && isAdmin();
+    }
+
+    // Admins list
+    match /admins/{adminId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+  }
+}
